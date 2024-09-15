@@ -22,25 +22,21 @@
 
 ## Market Data Feeder
 
-- **Location**: 
 - Establishes a connection to the external brokerage.
 - Receives rates via a WebSocket API and publishes them to Kafka.
 
 ## Live Data Consumers
 
-- **Location**: 
 - Consumers that receive market data published by the Market Data Feeder to Kafka.
 - Each consumer performs a specific task, such as writing market data to a PKL file or updating Redis and InfluxDB.
 
 ## Metric Calculators
 
-- **Location**: 
 - Queries market data and other data points from Redis/InfluxDB.
 - Calculates metrics using the data and writes the results back to Redis and InfluxDB for use by other processes.
 
 ## Core Microservices
 
-- **Location**: 
 
 ### 1. Trading Service
 
@@ -66,6 +62,7 @@
 
 ### 3. Execution Handler
 
+- **Instance**: Single.
 - Contains several children, each connecting to a different brokerage service (e.g., Zerodha, Smart API).
 - Handles all communication with the brokerage related to order placement.
 - Subscribes to ORDER events and publishes FILL events upon execution confirmation.
