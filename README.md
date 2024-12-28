@@ -20,6 +20,10 @@
 
 - A time-series database used to store all incoming market data and metrics.
 
+## PostGres
+
+- A Relation Database that is used to store all the non time-series static data
+
 ## Market Data Feeder
 
 - Establishes a connection to the external brokerage.
