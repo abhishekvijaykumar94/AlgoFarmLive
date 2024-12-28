@@ -1,14 +1,8 @@
 import sys
+
 import algoFarmAdapter as adapter
-# import algoLibs as libs
-import algoLibs.utils as libutils
-# import algoLibs.dao as libdao
-# import algoLibs.utils as libutils
-# from algoFarmAdapter.external.smart_api_connection_manager import SmartApiConnectionManager
-# from algoFarmAdapter.market_data.live.kafka_producers import MockMarketDataFeeder
-# from algoLibs.dao.Influx_db_client_manager import InfluxDBClientManager
 import algoLibs.dao.Influx_db_client_manager as libdao
-# from algoLibs.utils import PropertyManager, check_holiday, email_to_oneself
+import algoLibs.utils as libutils
 
 if __name__ == '__main__':
     ### Check holiday for today date..If today is holiday the program will exit

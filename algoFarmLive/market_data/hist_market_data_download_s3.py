@@ -4,7 +4,7 @@ import gc
 import os
 from datetime import date, timedelta, datetime
 import pandas as pd
-from algoLibs.dao import InfluxDBClientManager
+from algoLibs.dao.influx_db import InfluxDBClientManager
 from algoLibs.file_processors import TokenMappingProcessor
 from algoLibs.market_data_stream.connection_manager import BotoConnectionManager
 from algoLibs.market_operations.equity_market_data_influxdb_operations import EquityMarketDataInfluxDbOperations

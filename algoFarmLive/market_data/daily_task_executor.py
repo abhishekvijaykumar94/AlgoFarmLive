@@ -1,6 +1,6 @@
-from algoLibs.dao import InfluxDBClientManager
-from algoLibs.file_processors import LiveMarketDataSimulator
-from algoLibs.utils import PropertyManager
+from algoFarmAdapter.market_data.simulator.live_market_data_simulator import LiveMarketDataSimulator
+
+from algoFarmLive.utils.property_manager import PropertyManager
 
 if __name__ == '__main__':
 

@@ -1,36 +1,29 @@
-import sys
+from algoLibs import email_to_oneself, InfluxDBClientManager, AppConstants
+from algoLibs.utils.property_manager import PropertyManager
 
-from algoFarmAdapter.external.smart_api_connection_manager import SmartApiConnectionManager
-from algoFarmAdapter.market_data.live.kafka_producers import MarketDataFeeder
-from algoLibs.dao import InfluxDBClientManager
-from algoLibs.market_data_stream import generate_tokens
-from algoLibs.utils import email_to_oneself, check_holiday, PropertyManager
+from algoFarmAdapter import MarketDataFeeder, SmartApiConnectionManager
+from algoFarmAdapter.market_data.smart_api_market_data_subscriber import SmartApiMarketDataSubscriber
 
 if __name__ == '__main__':
     ### Check holiday for today date..If today is holiday the program will exit
-    if check_holiday():
-        email_to_oneself("Today is holiday..Enjoy!")
-        sys.exit()
+    # if check_holiday():
+    #     email_to_oneself("Today is holiday..Enjoy!")
+    #     sys.exit()
 
-    token_list = generate_tokens()
+    smart_api_market_data_subscriber = SmartApiMarketDataSubscriber()
+    token_list = smart_api_market_data_subscriber.get_token_subscription_list()
     message = "Starting script for today for {} tickers /n".format(len(token_list))
     message += "Tokens are :"
     message += ",".join([item['tokens'][0] for item in token_list])
     email_to_oneself(message)
-
-    api_key = PropertyManager.getValue('apikey')
-    live_market_data_kafka_topic = PropertyManager.getValue('smartApi.liveMarketData')
-    bootstrap_servers = PropertyManager.getValue('bootstrap.servers')
-    influx_db_client_manager = InfluxDBClientManager()
-    connection_manager = SmartApiConnectionManager(api_key)
-    data, feed_token = connection_manager.generate_session()
-    batch_size = PropertyManager.getValue('batch_size')
-
-    smart_api_market_data_feeder = MarketDataFeeder(api_key, data, live_market_data_kafka_topic, bootstrap_servers,
-                                                    feed_token, token_list, int(batch_size))
-
-    # smart_api_market_data_consumer = MarketDataConsumer(live_market_data_kafka_topic, bootstrap_servers, "smartApiLiveMarketData", influx_db_client_manager)
-
-    smart_api_market_data_feeder.start()
-
+    api_key = PropertyManager.getValue(AppConstants.API_KEY)
+    liveMarketDataKafkaTopic = PropertyManager.getValue(AppConstants.SMARTAPI_LIVE_MARKET_DATA)
+    boostrapServers = PropertyManager.getValue(AppConstants.BOOTSTRAP_SERVERS)
+    influxDBClientManager = InfluxDBClientManager()
+    connectionManager = SmartApiConnectionManager(api_key)
+    data,feedToken = connectionManager.generate_session()
+    batch_size = PropertyManager.getValue(AppConstants.BATCH_SIZE)
+    smartApiMarketDataFeeder = MarketDataFeeder(api_key,data,liveMarketDataKafkaTopic,boostrapServers,feedToken,token_list,int(batch_size))
+    # smartApiMarketDataConsumer = MarketDataConsumer(liveMarketDataKafkaTopic,boostrapServers,"smartApiLiveMarketData",influxDBClientManager)
+    smartApiMarketDataFeeder.start()
 
