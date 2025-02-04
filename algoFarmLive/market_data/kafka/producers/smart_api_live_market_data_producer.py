@@ -19,7 +19,7 @@ if __name__ == '__main__':
     api_key = PropertyManager.getValue(AppConstants.API_KEY)
     liveMarketDataKafkaTopic = PropertyManager.getValue(AppConstants.SMARTAPI_LIVE_MARKET_DATA)
     boostrapServers = PropertyManager.getValue(AppConstants.BOOTSTRAP_SERVERS)
-    influxDBClientManager = InfluxDBClientManager()
+    # influxDBClientManager = InfluxDBClientManager()
     connectionManager = SmartApiConnectionManager(api_key)
     data,feedToken = connectionManager.generate_session()
     batch_size = PropertyManager.getValue(AppConstants.BATCH_SIZE)
