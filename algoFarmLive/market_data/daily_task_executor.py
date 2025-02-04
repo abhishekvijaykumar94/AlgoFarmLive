@@ -1,11 +1,12 @@
 from algoFarmAdapter.market_data.simulator.live_market_data_simulator import LiveMarketDataSimulator
+from algoLibs import InfluxDBClientManager
 
 from algoFarmLive.utils.property_manager import PropertyManager
 
 if __name__ == '__main__':
 
     start_date_time = '2024-06-03 00:00:00'
-    end_date_time = '2024-06-03 00:00:00'
+    end_date_time = '2024-06-04 00:00:00'
     bucket_name = PropertyManager.getValue('s3bucket')
     live_market_data_kafka_topic = PropertyManager.getValue('smartApi.liveMarketData')
     daily_market_downloader = LiveMarketDataSimulator(start_date_time, end_date_time,
