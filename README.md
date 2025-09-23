@@ -45,26 +45,20 @@
 ### 1. Trading Service
 
 - Contains several children, each representing a strategy.
-- Queries data from Redis/InfluxDB at a specified frequency.
+- Can either directly receive live market data or can Query data from Redis/InfluxDB at a specified frequency.
 - Generates a **SIGNAL** event containing a list of symbols/tokens with direction, lots, and naïve take profit and stop loss levels.
 - Subscribes to **FILL** events and monitors the status of filled trades, generating sophisticated TP and SL levels.
 - **Flow**:
   - If no existing trades are open, query the market data for relevant tickers at a specific frequency.
   - Run strategy logic to check if a SIGNAL needs to be generated.
   - Upon satisfying criteria, generate the SIGNAL.
+  - Analyzes each SIGNAL event and performs pre-trade checks based on configured trading limits.
+  - Ensures incremental order size is within limits.
   - The SIGNAL is sent to the execution handler and executed, resulting in a trade saved in cache and DB.
   - A FILL event is generated upon booking the trade, which is consumed by the Trading Service to update active trades.
   - The service continues querying data at the same frequency to check for new entry and exit signals.
 
-### 2. Pre-Trade Risk Service
-
-- **Instance**: Single.
-- Subscribes to SIGNAL events and publishes ORDER events.
-- Analyzes each SIGNAL event and performs pre-trade checks based on configured trading limits.
-  - Ensures incremental order size is within limits.
-  - Analyzes each trade's incremental impact on the trading book, considering parameters like notional and delta.
-
-### 3. Execution Handler
+### 2. Execution Handler
 
 - **Instance**: Single.
 - Contains several children, each connecting to a different brokerage service (e.g., Zerodha, Smart API).
@@ -72,7 +66,7 @@
 - Subscribes to ORDER events and publishes FILL events upon execution confirmation.
 - Each brokerage has distinct handling procedures.
 
-### 4. Post-Trade Risk Service
+### 3. Post-Trade Risk Service
 
 - **Instance**: Single.
 - Handles all post-trade risk monitoring of active trades.
